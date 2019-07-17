@@ -23,11 +23,12 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "npm run eslint && NODE_ENV= npm run mocha",
-    "eslint": "eslint server/. test/. --config .eslintrc.json",
-    "dev": "nodemon server/",
-    "start": "node server/",
-    "mocha": "mocha test/ --recursive --exit"
+    "build": "nuxt build",
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "DEBUG=nuxt:* nodemon src/",
+    "start": "npm run build && node src/",
+    "mocha": "NODE_ENV=test mocha test/ --recursive --exit"
   },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.16",
@@ -43,6 +44,7 @@
     "feathers-nedb": "^4.0.2",
     "helmet": "^3.18.0",
     "nedb": "^1.8.0",
+    "nuxt": "^2.8.1",
     "serve-favicon": "^2.5.0",
     "winston": "^3.2.1"
   },
