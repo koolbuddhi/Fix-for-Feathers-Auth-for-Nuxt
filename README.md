@@ -1,6 +1,6 @@
 # feathers-nuxt-2
 
-> 
+Auth with SettimeOut
 
 ## About
 

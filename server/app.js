@@ -3,7 +3,7 @@ const favicon = require('serve-favicon')
 const compress = require('compression')
 const helmet = require('helmet')
 const cors = require('cors')
-
+const cookieParser = require('cookie-parser')
 const feathers = require('@feathersjs/feathers')
 const configuration = require('@feathersjs/configuration')
 const express = require('@feathersjs/express')
@@ -30,6 +30,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))
 // Host the public folder
 // app.use('/', express.static(app.get('public')));
+
+app.use(cookieParser())
 
 // Set up Plugins and providers
 app.configure(express.rest())
