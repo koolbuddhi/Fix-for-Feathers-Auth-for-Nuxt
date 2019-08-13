@@ -11,5 +11,9 @@ module.exports = {
         config.devtool = '#source-map'
       }
     }
-  }
+
+  },
+  plugins: [
+    '~/plugins/authenticateBeforeNuxtRender.client'
+  ]
 }

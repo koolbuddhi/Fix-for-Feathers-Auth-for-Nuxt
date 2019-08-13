@@ -25,16 +25,21 @@ export default {
     ...mapGetters('users', { findUsersInStore: 'list' }),
     ...mapState('auth', ['isAuthenticatePending', 'accessToken'])
   },
-  async mounted() {
-    try {
-    // setTimeout(() => {
-      console.log('Auth Status', this.isAuthenticatePending)
-      console.log('Auth toekn', this.accessToken)
-      await this.findUsers({ query: {} })
-    // }, 100)
-    } catch (error) {
-      console.log('Error in HomeProtected', error)
-    }
+  mounted() {
+    this.findUsers({ query: {} })
+    // if (process.client) {
+    // // try {
+    //   // setTimeout(() => {
+    //   console.log('Auth env', process.client)
+    //   console.log('Auth Status before', this.isAuthenticatePending)
+    //   console.log('Auth toekn', this.accessToken)
+    //   this.findUsers({ query: {} }).then(res => console.log('findUser res: ', res))
+    //   console.log('Auth Status-After auth', this.isAuthenticatePending)
+    //   // }, 100)
+    // // } catch (error) {
+    // //   console.log('Error in HomeProtected', error)
+    // // }
+    // }
   },
   methods: {
 

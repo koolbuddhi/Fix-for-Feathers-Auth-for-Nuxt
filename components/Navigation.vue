@@ -29,9 +29,10 @@ export default {
     }
   },
   created() {
-    if (process.browser) {
-      this.$store.dispatch('auth/authenticate').then(() => { console.log('Auth Navi', this.isAuthenticated) }).catch((ex) => { console.log('Client Auth', ex) })
-    }
+    console.log('Navi IsClient:[%s]', process.client)
+    // if (process.client) {
+    //   this.$store.dispatch('auth/authenticate').then(() => { console.log('Auth Navi', this.isAuthenticated) }).catch((ex) => { console.log('Client Auth', ex) })
+    // }
   }
 }
 </script>

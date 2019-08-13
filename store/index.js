@@ -1,50 +1,78 @@
+import Vuex from 'vuex'
 import feathersVuex, { initAuth } from 'feathers-vuex'
+import { CookieStorage } from 'cookie-storage'
 import feathersClient from '../feathersClient'
-const { service, auth } = feathersVuex(feathersClient, { idField: '_id' })
 
-export const state = () => ({
-  counter: 5
-})
+let plugins = []
+// Create services for the browser
+if (process.client) {
+  const browserClient = feathersClient('', new CookieStorage())
+  const { service: browserService, auth: browserAuth } = feathersVuex(browserClient, { idField: '_id', enableEvents: false })
 
-export const getters = {
-  getCalculated(state) {
-    return state.counter * 5
-  }
-}
-
-export const mutations = {
-  increment(state) {
-    state.counter++
-  }
-}
-
-export const actions = {
-  increment(context) {
-    context.commit('increment')
-  },
-  nuxtServerInit({ commit, dispatch, state }, { req }) {
-    return initAuth({
-      commit,
-      dispatch,
-      req,
-      moduleName: 'auth',
-      cookieName: 'feathers-jwt'
+  plugins = [
+    browserService('users', { paginate: true }),
+    browserAuth({
+      userService: 'users',
+      state: {
+        publicPages: [
+          'index',
+          'authenticate'
+        ]
+      }
     })
-      .then((payload) => {
-        // console.log('Server Init - InitAuth >>', payload)
-        // console.log('Server Init - InitAuth >>', state.auth.accessToken)
-
-        // dispatch('auth/authenticate').catch((ex) => { console.log('Server Auth', ex) })
-        dispatch('auth/authenticate', { stategy: 'jwt', accessToken: state.auth.accessToken }).catch(ex => console.log('ServerAuth', ex))
-        // dispatch('users/find')
-      }).catch((_) => {})
-  }
+  ]
 }
 
-export const plugins = [
-  service('users'),
-  auth({
-    state: { publicPages: ['index', 'authenticate'] },
-    userService: 'users'
+const createStore = () => {
+  return new Vuex.Store({
+    state: {},
+    actions: {
+      nuxtServerInit({ commit, dispatch, state }, { req, store }) {
+        let origin = req.headers.host.split(':')
+        origin = `http://${origin[0]}`
+
+        const storage = {
+          getItem(key) {
+            return store.state.auth ? store.state.auth.accessToken : ''
+          },
+          setItem(key, value) {
+            store.state.auth.accessToken = value
+          },
+          removeItem(key) {
+            store.state.auth.accessToken = null
+          }
+        }
+        // Create a new client for the server
+        const client = feathersClient(origin, storage)
+        const { service, auth } = feathersVuex(client, { idField: '_id', enableEvents: false })
+        // Register services for the server
+        service('users', { paginate: true })(store)
+        auth({
+          userService: 'users',
+          state: {
+            publicPages: [
+              'index',
+              'authenticate'
+            ]
+          }
+        })(store)
+
+        return initAuth({
+          commit,
+          dispatch,
+          req,
+          moduleName: 'auth',
+          cookieName: 'feathers-jwt'
+        })
+          .then((response) => {
+            // console.log('AfterAuth', response)
+            return dispatch('auth/authenticate', { accessToken: store.state.auth.accessToken, strategy: 'jwt' }).then(res => console.log('After ServerAuth', store.state.auth))
+              .catch((_) => {})
+          })
+      }
+    },
+    plugins
   })
-]
+}
+
+export default createStore
