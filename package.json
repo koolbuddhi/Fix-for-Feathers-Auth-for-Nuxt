@@ -1,14 +1,14 @@
 {
-  "name": "feathers-nuxt-2",
+  "name": "feathers-nuxt-auth-fix",
   "description": "",
   "version": "0.0.0",
   "homepage": "",
   "main": "server",
   "keywords": [
-    "feathers"
+    "feathers, nuxt, store, auth, fix"
   ],
   "author": {
-    "name": "Buddhima",
+    "name": "Buddhima W.Wickramasinghe",
     "email": "buddhima@gmail.com"
   },
   "contributors": [],

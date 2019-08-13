@@ -1,14 +1,17 @@
-# feathers-nuxt-2
+# Nuxt with feathers
 
-Auth with SettimeOut
+### Problem:
+It seems that even though you are setting up the feathers client with the cookie storage module, the JWT is still not available to the feathers client as a cookie in the server environment. Hence, the error 'Could not find stored JWT and no authentication strategy was given'.
+
+### Solution:
+
+Use Nuxt Plugin to Authenticate through the store before Nuxt is rendered in the client
 
 ## About
 
 This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
 ## Getting Started
-
-Getting up and running is as easy as 1, 2, 3.
 
 1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
 2. Install your dependencies
@@ -20,28 +23,51 @@ Getting up and running is as easy as 1, 2, 3.
 3. Start your app
 
     ```
-    npm start
+    npm run dev
     ```
 
-## Testing
+4. Create user using postman
 
-Simply run `npm test` and all your tests in the `test/` directory will be run.
+    Send post request to http://localhost:3030/users with 
 
-## Scaffolding
+    Header
+    ```
+    Content-Type: application/json
+    Accept: application/json
+    ```
 
-Feathers has a powerful command line interface. Here are a few things it can do:
+    Body
+    ```
+    {
+        "email":"buddy@so.com",
+        "password": "123456"
+    }
+    ```
 
-```
-$ npm install -g @feathersjs/cli          # Install Feathers CLI
+    Your final request should look like bellow
+    ```
+    POST /users HTTP/1.1
+    Host: localhost:3030
+    Content-Type: application/json
+    Accept: application/json
+    cache-control: no-cache
+    Postman-Token: f0e3ab3e-b46c-42dd-9c49-91de88b8a841
 
-$ feathers generate service               # Generate a new Service
-$ feathers generate hook                  # Generate a new Hook
-$ feathers help                           # Show all commands
-```
+    {
+    "email":"buddy@so.com",
+    "password": "123456"
+    }
+    ```
+
+
+4. Run the app
+    * Route to http://localhost:3030/
+    * Login using the above credentils
+    * Route to the "Secret Section"
+    * Refresh browser using F5
 
 ## Help
 
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
 
 ## Changelog
 
