@@ -62,7 +62,7 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 
 4. Run the app
     * Route to http://localhost:3030/
-    * Login using the above credentils
+    * Login using the above credentials
     * Route to the "Secret Section"
     * Refresh browser using F5
 
